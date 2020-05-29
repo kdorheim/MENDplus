@@ -10,6 +10,8 @@ testthat::test_that("assign_parameters:", {
   testthat::expect_error(assign_parameters(data.table::data.table('parameter' = 'g', 'value' = 'n'), 'dt[["value"]] is not a numeric or integer vector'))
   x <- assign_parameters(data.table::data.table('parameter' = 'g', 'value' = 11))
   testthat::expect_true(is.null(x))
+
+  # If this function works then there should be an object called g, with the value of 11.
   testthat::expect_equal(g, 11)
 
 

@@ -22,10 +22,10 @@ params <- c('V.p',
            'Q.max',
            'K.ads',
            'K.des',
-           'K.ba') #,
-           #'I.p',
-           #'I.d',
-          # 'fI.d')
+           'K.ba',
+           'I.p',
+           'I.d',
+           'fI.d')
 
 # Model parameter/inputs description from table 2.
 description <- c('maximum specific decomposition rate for P by EP',
@@ -45,10 +45,10 @@ description <- c('maximum specific decomposition rate for P by EP',
                  'maximum DOC sorption capacity',
                  'specific adsorption rate',
                  'desorption rate',
-                 'binding affinity') #,
-                 #'input rate of P',
-                 #'input rate of D',
-                 #'ratio of ID to IP')
+                 'binding affinity',
+                 'input rate of P',
+                 'input rate of D',
+                 'ratio of ID to IP')
 
 # Model parameter/inputs units from table 2.
 units <- c('mgC mgC^-1 h^-1',
@@ -64,10 +64,10 @@ units <- c('mgC mgC^-1 h^-1',
            'mgC / g soil',
            'mgC mgC^-1 h^-1',
            'mgC mgC^-1 h^-1',
-           '(mgC/soil)^-1') #,
-           #'mgC mgC^-1 h^-1',
-           #'mgC mgC^-1 h^-1',
-          # NA)
+           '(mgC/soil)^-1',
+           'mgC mgC^-1 h^-1',
+           'mgC mgC^-1 h^-1',
+           NA)
 
 # Create the data table of the parameters.
 default_parameters <- data.table::data.table(parameter = params,
@@ -94,6 +94,9 @@ default_parameters[parameter == 'K.p', ]$value <- 50
 default_parameters[parameter == 'V.m', ]$value <- 1
 default_parameters[parameter == 'K.m', ]$value <- 250
 default_parameters[parameter == 'K.m', ]$value <- 250
+default_parameters[parameter == 'I.p', ]$value <- 8e-05
+default_parameters[parameter == 'I.d', ]$value <- 8e-05
+default_parameters[parameter == 'fI.d', ]$value <- default_parameters[parameter == 'I.d', ]$value /  default_parameters[parameter == 'I.p', ]$value
 
 assertthat::assert_that(sum(is.na(default_parameters$value)) == 0, msg = 'Not all default parameter values have been defined.')
 
