@@ -1,12 +1,11 @@
 Package: MENDplus
 Type: Package
-Title: What the Package Does (Title Case)
+Title: The microbial-enzyme-mediated decomposition model (MEND) with flexible kinetic and environmental conditions.  
 Version: 0.1.0
-Author: Who wrote it
+Author: c(person("Kalyn", "Dorheim", email = "kalyn.dorheim@pnnl.gov", role = c("aut", "cre")))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: This is an R package representation of MEND (Wang et al. 2013 and Wang et al. 2015) that allows users to modify different structural representations of enzyme kinetics and environmental impacts. 
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports: 
