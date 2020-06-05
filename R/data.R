@@ -6,5 +6,6 @@
 #' \item{description}{String character describing the parameter.}
 #' \item{units}{String character of the parameter units.}
 #' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}
+#' }
 #' @family parameters
 'default_parameters'
