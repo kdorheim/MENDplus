@@ -13,7 +13,6 @@ MEND_fluxes <- function(state, parms){
 
   # Check inputs
   assertthat::assert_that(assertthat::has_name(x = state, which = c("B", "D", "P", "Q", "M", "EP", "EM")))
- # assertthat::assert_that(is.numeric(params) & is.character(class(names(params))))
   assertthat::assert_that(data.table::is.data.table(parms))
   assertthat::assert_that(assertthat::has_name(x = parms, which = c("parameter", "description", "units", "value")))
 

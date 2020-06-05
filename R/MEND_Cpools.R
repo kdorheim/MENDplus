@@ -48,11 +48,11 @@ MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
     # EM = carbon stored as extracellular enzymes (related to fluxes 10 & 14)
     # T = the total carbon pool
 
-    dP <- I.p + (1 - g.d) * fluxes$F8() - fluxes$F2() # The change in the pool size of the POC
-    dM <- (1 - f.d) * fluxes$F2() - fluxes$F3()       # The change in themineral assoicated OC
-    dQ <- fluxes$F6() - fluxes$F7()                   # The change in the active MOC through adsorption and desorption
+    dP <- I.p + ((1 - g.d) * fluxes$F8()) - fluxes$F2() # The change in the pool size of the POC
+    dM <- ((1 - f.d) * fluxes$F2()) - fluxes$F3()       # The change in themineral assoicated OC
+    dQ <- (fluxes$F6() - fluxes$F7())                   # The change in the active MOC through adsorption and desorption
     dB <- fluxes$F1() - (fluxes$F4() + fluxes$F5()) - fluxes$F8() - (fluxes$F9() + fluxes$F10()) # The change in microbial biomass
-    dD <- I.d + f.d * fluxes$F2() + g.d * fluxes$F8() + fluxes$F3() + (fluxes$F11() + fluxes$F12()) - fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
+    dD <- I.d + (f.d * fluxes$F2()) + (g.d * fluxes$F8()) + fluxes$F3() + (fluxes$F11() + fluxes$F12()) - fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
     dEP <- fluxes$F9() - fluxes$F11()   # The change in the pool size of the EP extracellular enzymes
     dEM <- fluxes$F10() - fluxes$F12()  # The change in the pool size of the EM extracellular enzymes
     dT <- I.p + I.d - (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
