@@ -4,8 +4,8 @@
 
 context('original MEND model')
 
-state <- c(2e+00, 1e+00, 1e+01, 1e-01, 5e+00, 1e-05, 1e-05, 4)
-names(state) <- c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot')
+state <- c(2e+00, 1e+00, 1e+01, 1e-01, 5e+00, 1e-05, 1e-05, 4, 0)
+names(state) <- c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot', 'IC')
 t <- 1
 
 

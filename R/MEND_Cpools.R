@@ -15,7 +15,7 @@
 MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
 
   # Check the inputs
-  assertthat::assert_that(assertthat::has_name(x = state, which = c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot')))
+  assertthat::assert_that(assertthat::has_name(x = state, which = c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot', 'IC')))
   assertthat::assert_that(data.table::is.data.table(parms))
   assertthat::assert_that(assertthat::has_name(x = parms, which = c("parameter", "description", "units", "value")))
   assertthat::assert_that(is.function(flux_function))
@@ -56,7 +56,8 @@ MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
     dEP <- fluxes$F9() - fluxes$F11()   # The change in the pool size of the EP extracellular enzymes
     dEM <- fluxes$F10() - fluxes$F12()  # The change in the pool size of the EM extracellular enzymes
     dTot <- I.p + I.d - (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
+    dIC <- (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
 
-    list(c(dP, dM, dQ, dB, dD, dEP, dEM, dTot))
+    list(c(dP, dM, dQ, dB, dD, dEP, dEM, dTot, dIC))
   })
 }
