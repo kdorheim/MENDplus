@@ -31,8 +31,8 @@ MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
     # by the MEND carbon pool structure.
     fluxes <- flux_function(state = state, parms = parms)
 
-    expected_fluxes <- rep('F', length.out = length(1:12))
-    expected_fluxes <- paste0(expected_fluxes, 1:12)
+    expected_fluxes <- rep('F', length.out = length(1:8))
+    expected_fluxes <- c(paste0(expected_fluxes, 1:8), 'F9.ep', 'F9.em', 'F10.ep', 'F10.em')
     assertthat::assert_that(assertthat::has_name(x = fluxes, which = expected_fluxes))
     assertthat::assert_that(all(unlist(lapply(fluxes, is.function))), msg = 'fluxes input must be a list of functions')
 
@@ -46,15 +46,16 @@ MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
     # D = dissolved organic carbon
     # EP = carbon stored as extracellular enzymes (related to fluxes 9 & 13) -- these are the ones I most nervous about
     # EM = carbon stored as extracellular enzymes (related to fluxes 10 & 14)
-    # T = the total carbon pool
+    # Tot = the total carbon pool
+    # IC = inorganic carbon (CO2)
 
     dP <- I.p + ((1 - g.d) * fluxes$F8()) - fluxes$F2() # The change in the pool size of the POC
     dM <- ((1 - f.d) * fluxes$F2()) - fluxes$F3()       # The change in themineral assoicated OC
     dQ <- (fluxes$F6() - fluxes$F7())                   # The change in the active MOC through adsorption and desorption
-    dB <- fluxes$F1() - (fluxes$F4() + fluxes$F5()) - fluxes$F8() - (fluxes$F9() + fluxes$F10()) # The change in microbial biomass
-    dD <- I.d + (f.d * fluxes$F2()) + (g.d * fluxes$F8()) + fluxes$F3() + (fluxes$F11() + fluxes$F12()) - fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
-    dEP <- fluxes$F9() - fluxes$F11()   # The change in the pool size of the EP extracellular enzymes
-    dEM <- fluxes$F10() - fluxes$F12()  # The change in the pool size of the EM extracellular enzymes
+    dB <- fluxes$F1() - (fluxes$F4() + fluxes$F5()) - fluxes$F8() - (fluxes$F9.ep() + fluxes$F9.em()) # The change in microbial biomass
+    dD <- I.d + (f.d * fluxes$F2()) + (g.d * fluxes$F8()) + fluxes$F3() + (fluxes$F10.ep() + fluxes$F10.em()) - fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
+    dEP <- fluxes$F9.ep() - fluxes$F10.ep()   # The change in the pool size of the EP extracellular enzymes
+    dEM <- fluxes$F9.em() - fluxes$F10.em()  # The change in the pool size of the EM extracellular enzymes
     dTot <- I.p + I.d - (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
     dIC <- (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
 

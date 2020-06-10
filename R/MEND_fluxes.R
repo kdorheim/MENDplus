@@ -23,18 +23,43 @@ MEND_fluxes <- function(state, parms){
 
   with(as.list(c(state, p)), {
 
-    fxn_list <- list("F1" = function(){ (1/E.c) * (V.d + m.r) * ((D * B)/(K.d + D)) },
-                     "F2" = function(){ (V.p * EP * P ) / (K.p + P) },
-                     "F3" = function(){ (V.m * EM * M) / (K.m + M) },
-                     "F4" = function(){ ((1/E.c) - 1) * ((V.d  * B * D)/(K.d + D)) },
-                     "F5" = function(){ ((1/E.c) - 1)*((m.r * B * D)/(K.d + D)) },
-                     "F6" = function(){ K.ads * (1 - (Q/Q.max) * D) },
-                     "F7" = function(){ K.des * (Q/Q.max) },
-                     "F8" = function(){ ((1 - p.ep - p.em) * m.r) * B },
-                     "F9" = function(){ p.ep * m.r * B },
-                     "F10" = function(){ p.em * m.r * B },
-                     "F11" = function(){ r.ep * EP },
-                     "F12" = function(){ r.em * EM })
+    fxn_list <- list(
+      "F1" = function(){
+        # DOC uptake by microbial biomass.
+        (1/E.c) * (V.d + m.r) * ((D * B)/(K.d + D)) },
+      "F2" = function(){
+        # POC decomposition
+        (V.p * EP * P ) / (K.p + P) },
+      "F3" = function(){
+        # Break down of mineralized organic carbon
+        (V.m * EM * M) / (K.m + M) },
+      "F4" = function(){
+        # Microbial respiration from biomass growth
+        ((1/E.c) - 1) * ((V.d  * B * D)/(K.d + D)) },
+      "F5" = function(){
+        # Metabolic/maintenance microbial respiration
+        ((1/E.c) - 1)*((m.r * B * D)/(K.d + D)) },
+      "F6" = function(){
+        # Adsorption of DOC to mineral-associated organic carbon
+        K.ads * (1 - (Q/Q.max) * D) },
+      "F7" = function(){
+        # Desorption of mineral-associated organic carbon to DOC
+        K.des * (Q/Q.max) },
+      "F8" = function(){
+        # Carbon loss due to microbial biomass mortality
+        ((1 - p.ep - p.em) * m.r) * B },
+      "F9.ep" = function(){
+        # Enzyme production
+        p.ep * m.r * B },
+      "F9.em" = function(){
+        # Enzyme production
+        p.em * m.r * B },
+      "F10.ep" = function(){
+        # Enzyme turn over
+        r.ep * EP },
+      "F10.em" = function(){
+        # Enzyme turn over
+        r.em * EM })
 
     return(fxn_list)
 
