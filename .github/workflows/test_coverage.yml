@@ -24,7 +24,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages(c('remotes', 'ggplot2'))
+          install.packages(c('remotes', 'ggplot2', 'deSolve'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", 'ggplot2'))
+          install.packages(c("remotes", 'ggplot2', 'deSolve'))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("covr")
         shell: Rscript {0}
