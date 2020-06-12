@@ -10,7 +10,7 @@ M = 5; EP = 0.00001
 EM =  0.00001; IC = 0
 Tot = 18.10002
 
-
+state <- c(P = P,  M = M,  Q = Q,  B = B,  D = D,  EP = EP,  EM = EM,  IC = IC,  Tot = Tot)
 testthat::test_that("MEND_fluxes", {
 
   testthat::expect_error(MEND_fluxes(state = state[1:2], parms = default_parameters))
