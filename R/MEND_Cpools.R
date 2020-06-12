@@ -15,7 +15,10 @@
 MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
 
   # Check the inputs
-  assertthat::assert_that(assertthat::has_name(x = state, which = c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot', 'IC')))
+  required_states <- c("P", "M", "Q", "B", "D", "EP", "EM", "IC", "Tot")
+  missing_states  <- required_states[!required_states %in% names(state)]
+  assertthat::assert_that(length(missing_states) == 0, msg = paste0('missing states: ', paste(missing_states, collapse = ',  ')))
+  assertthat::assert_that(all(required_states  == names(state)), msg = paste0('state pools must be in the following order: ', paste(required_states, collapse = ',  ')))
   assertthat::assert_that(data.table::is.data.table(parms))
   assertthat::assert_that(assertthat::has_name(x = parms, which = c("parameter", "description", "units", "value")))
   assertthat::assert_that(is.function(flux_function))
@@ -44,21 +47,23 @@ MEND_carbon_pools <- function(t, state, parms, flux_function = MEND_fluxes){
     # Q = active layer of MOC
     # B = microbial biomass carbon
     # D = dissolved organic carbon
-    # EP = carbon stored as extracellular enzymes (related to fluxes 9 & 13) -- these are the ones I most nervous about
-    # EM = carbon stored as extracellular enzymes (related to fluxes 10 & 14)
+    # EP = carbon stored as extracellular enzymes
+    # EM = carbon stored as extracellular enzymes
     # Tot = the total carbon pool
     # IC = inorganic carbon (CO2)
 
-    dP <- I.p + ((1 - g.d) * fluxes$F8()) - fluxes$F2() # The change in the pool size of the POC
-    dM <- ((1 - f.d) * fluxes$F2()) - fluxes$F3()       # The change in themineral assoicated OC
-    dQ <- (fluxes$F6() - fluxes$F7())                   # The change in the active MOC through adsorption and desorption
+    dP <- I.p + (1 - g.d) * fluxes$F8() - fluxes$F2() # The change in the pool size of the POC
+    dM <- (1 - f.d) * fluxes$F2() - fluxes$F3()       # The change in themineral assoicated OC
+    dQ <- fluxes$F6() - fluxes$F7()                   # The change in the active MOC through adsorption and desorption
     dB <- fluxes$F1() - (fluxes$F4() + fluxes$F5()) - fluxes$F8() - (fluxes$F9.ep() + fluxes$F9.em()) # The change in microbial biomass
-    dD <- I.d + (f.d * fluxes$F2()) + (g.d * fluxes$F8()) + fluxes$F3() + (fluxes$F10.ep() + fluxes$F10.em()) - fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
-    dEP <- fluxes$F9.ep() - fluxes$F10.ep()   # The change in the pool size of the EP extracellular enzymes
-    dEM <- fluxes$F9.em() - fluxes$F10.em()  # The change in the pool size of the EM extracellular enzymes
-    dTot <- I.p + I.d - (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
-    dIC <- (fluxes$F4() + fluxes$F5()) # Total change in the carbon pool
+    dD <- I.d + f.d * fluxes$F2() + g.d * fluxes$F8() + fluxes$F3() + (fluxes$F10.em() + fluxes$F10.ep())- fluxes$F1() - (fluxes$F6() - fluxes$F7()) # The change in the DOC
+    dEP <- fluxes$F9.em() - fluxes$F10.ep() # The change in the pool size of the EP extracellular enzymes
+    dEM <- fluxes$F9.em() - fluxes$F10.em() # The change in the pool size of the EM extracellular enzymes
+    dIC <- fluxes$F4() + fluxes$F5()        # Total change in the carbon pool
+    dTot <- I.p + I.d - (fluxes$F4() + fluxes$F5())  # Total change in the carbon pool
 
-    list(c(dP, dM, dQ, dB, dD, dEP, dEM, dTot, dIC))
+    # Return outputs
+    list(c(dP, dM, dQ, dB, dD, dEP, dEM, dIC, dTot))
   })
 }
+

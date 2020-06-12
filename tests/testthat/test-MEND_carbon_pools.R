@@ -4,9 +4,11 @@
 
 context('original MEND model')
 
-state <- c(2e+00, 1e+00, 1e+01, 1e-01, 5e+00, 1e-05, 1e-05, 4, 0)
-names(state) <- c("B", "D", "P", "Q", "M", "EP", "EM", 'Tot', 'IC')
-t <- 1
+B = 2; D = 1
+P = 10; Q = 0.1
+M = 5; EP = 0.00001
+EM =  0.00001; IC = 0
+Tot = 18.10002
 
 
 testthat::test_that("MEND_fluxes", {
@@ -25,11 +27,13 @@ testthat::test_that("MEND_fluxes", {
 
 testthat::test_that("MEND_carbon_pools", {
 
-  testthat::expect_error(MEND_carbon_pools(t = t, state = state, parms = default_parameters, flux_function =  'not a list'))
-  testthat::expect_error(MEND_carbon_pools(t = t, state = state[1:2], parms = default_parameters, flux_function = function(){}))
-  testthat::expect_error(MEND_carbon_pools(t = t, state = state, parms = default_parameters[ , 1:2], flux_function =  function(){}))
-
   # Make sure it works with default fluxes defined.
+  state <- c(P = P,  M = M,  Q = Q,  B = B,  D = D,  EP = EP,  EM = EM,  IC = IC,  Tot = Tot)
+  testthat::expect_error(MEND_carbon_pools(t = t, state = state, parms = default_parameters, flux_function =  'not a list'))
+  testthat::expect_error(MEND_carbon_pools(t = t, state = state[1:2], parms = default_parameters, flux_function = function(){}), 'missing states: Q,  B,  D,  EP,  EM,  IC,  Tot')
+  testthat::expect_error(MEND_carbon_pools(t = t, state = state, parms = default_parameters[ , 1:2], flux_function =  function(){}))
+  testthat::expect_error(MEND_carbon_pools(t = t, state = rev(state), parms = default_parameters, flux_function =  MEND_fluxes), 'state pools must be in the following order: P,  M,  Q,  B,  D,  EP,  EM,  IC,  Tot')
+
   xx <- MEND_carbon_pools(state = state, parms = default_parameters)
   # Length of the output should equal the number of states (pools of carbon) and is some number.
   testthat::expect_true(is.numeric(sum(unlist(xx))))
