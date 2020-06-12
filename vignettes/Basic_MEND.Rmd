@@ -29,7 +29,7 @@ library(deSolve)    # ODE solver
 state <- c(P = 10,  M = 5,  Q = 0.1,  B = 2,  D = 1,  EP = 0.00001,  EM = 0.00001,  IC = 0,  Tot = 18.10002)
 
 # Specify the time steps. 
-times <- seq(0, 15000, 1)
+times <- seq(0, 1000, 1)
 
 # Use the table of default parameters values. 
 params <- default_parameters
