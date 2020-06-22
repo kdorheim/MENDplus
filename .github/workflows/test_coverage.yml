@@ -1,6 +1,6 @@
 env:
     cache-version: v1
-    r-version: 4.0
+    r-version: 3.6
 
 on:
   push:
