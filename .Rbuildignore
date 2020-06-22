@@ -3,6 +3,5 @@
 ^data-raw$
 ^analysis$
 ^_pkgdown\.yml$
-^docs$
 ^pkgdown$
 ^\.github/workflows/pkgdown\.yaml$
