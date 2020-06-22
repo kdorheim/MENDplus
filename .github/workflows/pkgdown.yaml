@@ -13,13 +13,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
- 		with:
-    		r-version: '3.6.0' 
+
       - uses: r-lib/actions/setup-pandoc@master
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
+          install.packages(c('remotes', 'deSolve', 'ggplot2'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -33,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "ggplot2", "deSolve"))
+          install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
@@ -44,3 +43,4 @@ jobs:
       - name: Deploy package
         run: pkgdown::deploy_to_branch(new_process = FALSE)
         shell: Rscript {0}
+
