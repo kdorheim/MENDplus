@@ -27,3 +27,9 @@ test_that('replace_params', {
 })
 
 
+test_that('log_prior', {
+
+  params <- c('Q.max' = 40, 'E.c' = 100)
+  out <- log_prior(params)
+  expect_true(is.numeric(out))
+})
