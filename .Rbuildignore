@@ -6,3 +6,4 @@
 ^pkgdown$
 ^\.github/workflows/pkgdown\.yaml$
 ^docs$
+^*git*$

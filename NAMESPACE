@@ -3,6 +3,7 @@
 export(MEND_carbon_pools)
 export(MEND_fluxes)
 export(log_prior)
+export(make_logpost)
 export(replace_params)
 import(data.table)
 importFrom(assertthat,assert_that)

@@ -4,4 +4,6 @@
 .Ruserdata
 MENDplus.Rproj
 analysis/
+*.DS_Store
 
+inst/doc
