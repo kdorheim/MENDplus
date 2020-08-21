@@ -52,7 +52,6 @@ replace_params <- function(params, ptable = default_parameters){
 #' \item{units}{String character of the parameter units.}
 #' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}}
 #' @return the log prior for the sampled parameters.
-#' @importFrom assertthat assert_that
 #' @export
 log_prior <- function(params, ptable = default_parameters){
 
@@ -66,3 +65,105 @@ log_prior <- function(params, ptable = default_parameters){
   return(sum(lpriors))
 
 }
+
+
+#' Set up the function that will calculate the log posterior.
+#'
+#' \code{make_logpost} Define the function that will calculate the log
+#' posterior. The function returned by \code{make_logpost} will be used in
+#' the \code{metrop} to conduct the mcmc.
+#' TODO figure out  a better way to document the inputs/
+#'
+#' @param comp \describe{the comparison data frame it must comain at least two columns,
+#' \item{time}{model time}
+#' \item{IC}{inorganic carbon, is the the co2 flux from  microbial respiration.}}
+#' @param params a named vector of the inital guess of the parameters that will be calibrated in the mcmc.
+#' @param t time vector that will be used to run the model.
+#' @param state the inital state variables
+#' @param carbon_pools_func the function that governs the relationship between the different carbon
+#' pools, by default it is set to \code{MEND_carbon_pools}.
+#' @param  flux_func the function that governs fluxes, by default is it set to \code{MEND_fluxes}.
+#' @param ptable
+#'\describe{ A table of MEND parameter calues, by default is it set to \cpde{default_parameters}. While
+#' a different table may be used it must contain the following columns.
+#' \item{parameter}{String character of the default MEND parameters.}
+#' \item{description}{String character describing the parameter.}
+#' \item{units}{String character of the parameter units.}
+#' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}}
+#' @param verbose a TRUE/FALSE indicator to run the function in verbose mode where messages are printed out,
+#' by default set to FALSE.
+#' @return a function that will return the log posterior.
+#' @importFrom assertthat assert_that
+#' @export
+make_logpost <- function(comp,
+                         params,
+                         t = seq(0, 1000, 1),
+                         state = c(P = 10,  M = 5,  Q = 0.1,  B = 2,  D = 1,
+                                   EP = 0.00001,  EM = 0.00001,  IC = 0,  Tot = 18.10002),
+                         carbon_pools_func = MEND_carbon_pools,
+                         flux_func = MEND_fluxes,
+                         ptable = default_parameters,
+                         verbose = FALSE){
+
+
+  assert_that(is.data.frame(comp))
+  assert_that(all(c('time', 'IC') %in% names(comp)))
+  pnames <- names(params)
+
+  assert_that(is.function(carbon_pools_func), msg = 'must be a function')
+  assert_that(is.function(flux_func), msg = 'must be a function')
+
+  function(params){
+
+    names(params) <- pnames
+
+    if(verbose){
+      message(paste0(names(params), collapse = ', '))
+      message(paste0(params, collapse = ', '))
+      message('-----')
+    }
+
+    # Update the parameter table so that it includes reflects the new paramter values.
+    params_to_use <- replace_params(params, ptable)
+
+    # TODO may be change the solver being used here or make is so that the user has more control of the
+    # type of solver that can be set up.
+    # Set up the ODE solver to solve MEND governed with MEND's default flux.
+    output <- as.data.frame(deSolve::ode(y = state,                     # A vector of the initial size of the C pools
+                                         times = t,                     # A vector of the time steps to solve
+                                         parms = params_to_use,         # A data.table of parameters (saved as package data)
+                                         func = carbon_pools_func,      # This is the  function we want the ODE to solve, the MEND carbon pools
+                                         flux_function = flux_func))    # Define the flux functions to use, for now stick with the fluxes from  the 2013 paper.
+
+    # Subset the output results so that the time frames have the same contents. Then
+    # for each column of output data calculate MSE between the comparison data and
+    # the model output.
+    subset_out <- output[output[['time']] %in% comp[['time']], ]
+    to_compare <- names(comp)[names(comp) != 'time']
+
+    # If for whatever reason
+    if(max(subset_out[['time']]) < max(subset_out[['time']])){
+
+      log_post <- -Inf
+
+    } else {
+
+      MSE <- sapply(to_compare, function(name){
+        mean((subset_out[[name]] - comp[[name]])^2)
+      }, USE.NAMES = TRUE)
+
+      # Calculate the log likelihood.
+      log_likelihood <- log(sum(MSE))
+
+      # Now calcualte the log prior.
+      lp <- log_prior(params)
+
+      log_post <- log_likelihood + lp
+
+    }
+
+    return(log_post)
+
+  }
+}
+
