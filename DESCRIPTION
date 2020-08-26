@@ -10,7 +10,9 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table (>= 1.12.8), 
-    assertthat (>= 0.2.1)
+    assertthat (>= 0.2.1), 
+    deSolve (>= 1.28), 
+    mcmc (>= 0.9)
 RoxygenNote: 7.0.2
 Suggests: 
     testthat (>= 2.1.0),
