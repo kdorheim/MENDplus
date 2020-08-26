@@ -84,7 +84,7 @@ log_prior <- function(params, ptable = default_parameters){
 #' pools, by default it is set to \code{MEND_carbon_pools}.
 #' @param  flux_func the function that governs fluxes, by default is it set to \code{MEND_fluxes}.
 #' @param ptable
-#'\describe{ A table of MEND parameter calues, by default is it set to \cpde{default_parameters}. While
+#'\describe{ A table of MEND parameter calues, by default is it set to \code{default_parameters}. While
 #' a different table may be used it must contain the following columns.
 #' \item{parameter}{String character of the default MEND parameters.}
 #' \item{description}{String character describing the parameter.}
