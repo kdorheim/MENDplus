@@ -12,7 +12,7 @@ make_logpost(
     18.10002),
   carbon_pools_func = MEND_carbon_pools,
   flux_func = MEND_fluxes,
-  ptable = default_parameters,
+  ptable = MENDplus::default_parameters,
   verbose = FALSE
 )
 }

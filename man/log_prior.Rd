@@ -4,7 +4,7 @@
 \alias{log_prior}
 \title{Calculate the log prior}
 \usage{
-log_prior(params, ptable = default_parameters)
+log_prior(params, ptable = MENDplus::default_parameters)
 }
 \arguments{
 \item{params}{a vector of parameters, the vector must include parameter names.}

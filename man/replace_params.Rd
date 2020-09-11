@@ -4,7 +4,7 @@
 \alias{replace_params}
 \title{Change parameter values in a parameter table.}
 \usage{
-replace_params(params, ptable = default_parameters)
+replace_params(params, ptable = MENDplus::default_parameters)
 }
 \arguments{
 \item{params}{a vector of parameters, the vector must include parameter names.}

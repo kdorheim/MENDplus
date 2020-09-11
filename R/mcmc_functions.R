@@ -18,7 +18,7 @@
 #' @return A MEND parameter table with updated params values.
 #' @importFrom assertthat assert_that
 #' @export
-replace_params <- function(params, ptable = default_parameters){
+replace_params <- function(params, ptable = MENDplus::default_parameters){
 
   assert_that(!is.null(names(params)), msg = 'params vector must  be  named.')
   assert_that(all(names(params) %in% ptable$parameter),  msg = 'params names not identified as ptable parameter entries.')
@@ -53,12 +53,12 @@ replace_params <- function(params, ptable = default_parameters){
 #' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}}
 #' @return the log prior for the sampled parameters.
 #' @export
-log_prior <- function(params, ptable = default_parameters){
+log_prior <- function(params, ptable = MENDplus::default_parameters){
 
   lpriors <- mapply(FUN = function(p, pname){
 
     mean_p <- ptable$value[ptable$parameter == pname]
-    dnorm(x = p, mean = mean_p, sd = mean_p * 10, log = T)
+    stats::dnorm(x = p, mean = mean_p, sd = mean_p * 10, log = T)
 
   }, p = params, pname = names(params), SIMPLIFY = TRUE)
 
@@ -102,7 +102,7 @@ make_logpost <- function(comp,
                                    EP = 0.00001,  EM = 0.00001,  IC = 0,  Tot = 18.10002),
                          carbon_pools_func = MEND_carbon_pools,
                          flux_func = MEND_fluxes,
-                         ptable = default_parameters,
+                         ptable = MENDplus::default_parameters,
                          verbose = FALSE){
 
 
