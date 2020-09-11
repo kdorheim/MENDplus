@@ -1,6 +1,6 @@
 Package: MENDplus
 Type: Package
-Title: The microbial-enzyme-mediated decomposition model (MEND) with flexible kinetic and environmental conditions.  
+Title: The microbial-enzyme-mediated decomposition model (MEND) with flexible kinetic and environmental conditions
 Version: 0.1.0
 Author: c(person("Kalyn", "Dorheim", email = "kalyn.dorheim@pnnl.gov", role = c("aut", "cre")), comment = c(ORCID = "0000-0001-8093-8397"))
 Maintainer: Kalyn Dorheim <kalyn.dorheim@pnnl.gov>
@@ -9,10 +9,12 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    data.table
+    data.table (>= 1.12.8), 
+    assertthat (>= 0.2.1), 
+    deSolve (>= 1.28), 
+    mcmc (>= 0.9)
 RoxygenNote: 7.0.2
 Suggests: 
     testthat (>= 2.1.0),
-    knitr,
-    rmarkdown
+    knitr (>= 1.28)
 VignetteBuilder: knitr
