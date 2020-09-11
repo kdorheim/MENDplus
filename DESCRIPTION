@@ -4,7 +4,8 @@ Title: The microbial-enzyme-mediated decomposition model (MEND) with flexible ki
 Version: 0.1.0
 Author: c(person("Kalyn", "Dorheim", email = "kalyn.dorheim@pnnl.gov", role = c("aut", "cre")), comment = c(ORCID = "0000-0001-8093-8397"))
 Maintainer: Kalyn Dorheim <kalyn.dorheim@pnnl.gov>
-Description: This is an R package representation of MEND (Wang et al. 2013 and Wang et al. 2015) that allows users to modify different structural representations of enzyme kinetics and environmental impacts. 
+Description: This is an R package representation of MEND (Wang et al. 2013 and Wang et al. 2015) that allows users to modify different structural representations of enzyme kinetics and environmental impacts.
+Depends: R (>= 2.10)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
