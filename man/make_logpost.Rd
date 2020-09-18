@@ -10,9 +10,9 @@ make_logpost(
   t = seq(0, 1000, 1),
   state = c(P = 10, M = 5, Q = 0.1, B = 2, D = 1, EP = 1e-05, EM = 1e-05, IC = 0, Tot =
     18.10002),
-  carbon_pools_func = MEND_carbon_pools,
-  flux_func = MEND_fluxes,
-  ptable = MENDplus::default_parameters,
+  carbon_pools_func = MENDplus::MEND2013_pools,
+  flux_func = MENDplus::MEND2013_fluxes,
+  ptable = MENDplus::MEND2013_params,
   verbose = FALSE
 )
 }
@@ -28,11 +28,11 @@ make_logpost(
 \item{state}{the inital state variables}
 
 \item{carbon_pools_func}{the function that governs the relationship between the different carbon
-pools, by default it is set to \code{MEND_carbon_pools}.}
+pools, by default it is set to \code{MEND2013_pools}.}
 
-\item{flux_func}{the function that governs fluxes, by default is it set to \code{MEND_fluxes}.}
+\item{flux_func}{the function that governs fluxes, by default is it set to \code{MEND2013_fluxes}.}
 
-\item{ptable}{\describe{ A table of MEND parameter calues, by default is it set to \code{default_parameters}. While
+\item{ptable}{\describe{ A table of MEND parameter calues, by default is it set to \code{MEND2013_params}. While
 a different table may be used it must contain the following columns.
 \item{parameter}{String character of the default MEND parameters.}
 \item{description}{String character describing the parameter.}
