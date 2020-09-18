@@ -1,0 +1,117 @@
+---
+title: "How To: Alter MEND 2013 microbial kinetics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How To: Alter MEND 2013 microbial kinetics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+   dpi=150, fig.width=7, fig.height=7, out.width=504, out.height=504, fig.align='center'
+)
+```
+
+
+## Objective & Background
+
+The goal of `MENDplus` is to provide user with a flexible framework that to explore how parametric and structural uncertainty impact mircobical soil carbon dynamics. This vignette deomonstrates how changes can be made to explore what happens to model output when the model structure changes. Below is a modified conceptual diagram of MEND from [Wang et al. 2013](https://doi.org/10.1890/12-0681.1). There is a red cicle around arrow (1) which represents the carbon flux between the dissolved organic carbon (DOC) and the carbon microbial biomass (MBC). In the [Wang et al. 2013](https://doi.org/10.1890/12-0681.1) this flux is modeled with the Michaelis-Menten kinetics (MM) which we will replace with reverse Michaelis–Menten kinetics (R-MM). 
+
+![Fig 1: modified conceptual diagram of MEND from Wang et al. 2013](https://user-images.githubusercontent.com/27299759/93517321-4cf6a880-f8f9-11ea-8aa8-90013d10a07e.png){width=70%}
+
+\
+\
+
+![Eq 1: equation for the the flux D to B from Wang et al 2013.](https://esajournals.onlinelibrary.wiley.com/cms/asset/acddee9d-24a9-4aa8-be75-86388c52e091/eap2013231255-math-0009.gif)
+
+
+Equation 1 corresponds to $F_{1}$ (the arrow circled in red in Fig 1), it uses M-M kinetics to model the flux between DOC and microbial biomass. This implies the microbial biomass only depends on the availability of DOC and independent on the density of the microbial biomass (competition, waste, etc.) however these can be incorporated into the flux via a R-M-M kinetics representation. Modified $F_{1}$ will look like (eq 2): 
+
+$$F_{1} = \frac{1}{E_c}({V}_{d}*{m}_{r})\frac{D * B }{{K}_{d} + B}$$ 
+
+\
+
+
+## Solve Default MEND 2013
+
+```{r setup}
+library(MENDplus)
+library(ggplot2)
+```
+
+Start with solving MEND with the Wang et al. 2013 paper settings. 
+
+```{r}
+# Define the size of the different MEND 2013 carbon pools. 
+state <- c(P = 10,  M = 5,  Q = 0.1,  B = 2,  D = 1,  EP = 0.00001, EM = 0.00001,  IC = 0,  Tot = 18.10002)
+
+# Define a table of MEND parameters. # MENDplus containts a dataframe of the default parameter values from Wang et al. 2013.
+param <- MENDplus::MEND2013_params
+
+MEND2013_default <- solver(params = param, 
+                           time = seq(0, 1e3, by = 0.1), 
+                           state = state, 
+                           carbon_pools_func = MEND2013_pools, 
+                           carbon_fluxes_func = MEND2013_fluxes)
+```
+
+
+## Implementing R-M-M with `MENDplus`
+
+
+To incorperate the R-M-M kinetic dynamics we will have to modify the carbon flux functions. There are lots of different ways to do this. We will used the `modify_fluxes_func` to replace the M-M F1 with the R-M-M F1. 
+
+
+First create a list containing the new F1 function, this function will replace D with B in the denominator, to convert F1 from M-M kinetics as in equation 1 to R-M-M kinetics as in equation 2. 
+
+```{r}
+new_func_list <- function(){
+  
+  list('F1' = function(){
+        # DOC uptake by microbial biomass. Note all of these parameters must be defined in the parms
+        # data frame otherwise the problems will occur latter on. 
+        (1/E.c) * (V.d + m.r) * B * D /(K.d + B)})
+  }
+
+      
+```
+
+Next modify the MEND2013_fluxes with the `modify_fluxes_func`. 
+
+```{r}
+RMM_carbon_fluxes <- modify_fluxes_func(params = param,
+                                        state = state, 
+                                        flux_func = MEND2013_fluxes,
+                                        replace_with = new_func_list)
+```
+
+Now solve MEND. 
+
+```{r}
+MEND2013_RMM <- solver(params = MEND2013_params, 
+                           time = seq(0, 1e3, by = 0.1), 
+                           state = state, 
+                           carbon_pools_func = MEND2013_pools,
+                           carbon_fluxes_func = RMM_carbon_fluxes)
+```
+
+
+## Compare Results 
+
+```{r}
+# Add scn column to data frames
+MEND2013_RMM$scn     <- 'RMM'
+MEND2013_default$scn <- 'default'
+
+rslt <- rbind(MEND2013_RMM, MEND2013_default)
+```
+
+```{r}
+ggplot(data = rslt) + 
+  geom_line(aes(time, value, color = scn)) + 
+  facet_wrap('variable', scales = 'free') + 
+  theme_bw()
+```

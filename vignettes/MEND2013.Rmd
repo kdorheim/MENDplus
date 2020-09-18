@@ -1,0 +1,121 @@
+---
+title: "How To: Set up and solve MEND from Wang et al. 2013"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How To: Set up and solve MEND from Wang et al. 2013}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Objective 
+
+The goal of `MENDplus` is to provide user with a flexible framework that to explore how parametric and structural uncertainty impact mircobical soil carbon dynamics. In this vignette will demonstrate how to set up, solve, and modify the basic MEND documented in [Wang et al. 2013](https://doi.org/10.1890/12-0681.1). 
+
+## About MEND 2013
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+Start by setting up the R enviornment. 
+
+```{r setup}
+library(MENDplus)   # install with devtools::install_github 
+library(ggplot2)    # to make some plots 
+```
+
+
+\
+
+The 2013 MEND model is a system of differential equations that describe soil carbon dynamics. There are 8 different carbon pools represented as the circles that are connected by 12 arrows, which represent the fluxes between carbon pools. 
+
+\
+
+![Fig 1: conceptual diagram of MEND from Wang et al. 2013](https://esajournals.onlinelibrary.wiley.com/cms/asset/b4cc71bd-8987-4226-8ac1-9e5b6d547af2/eap2013231255-fig-0001-m.jpg){width=70%}
+
+To use an ode sovler to solve MEND we need, intial state values (the size of the pools) and a table of model parameter values. For this example all of these values are provided by the Wang et. al 2013 documeantion paper. 
+
+### A Basic Run
+
+```{r}
+# Define the size of the different MEND 2013 carbon pools. 
+state <- c(P = 10,  M = 5,  Q = 0.1,  B = 2,  D = 1,  EP = 0.00001, 
+           EM = 0.00001,  IC = 0,  Tot = 18.10002)
+
+# Define a table of MEND parameters. # MENDplus containts a dataframe of the default parameter values from Wang et al. 2013.
+param <- MENDplus::MEND2013_params
+```
+
+
+So to solve for the 2013 MEND model configuration use the `solver` function. The solver function let's the user define the carbon pools and carbon fluxes, latter on we will demonstrate how to take advantage of this to explore different configurations of MEND. 
+
+```{r}
+MEND2013_example1 <- solver(params = param, 
+                           time = seq(0, 1e3, by = 0.1), 
+                           state = state, 
+                           carbon_pools_func = MEND2013_pools, 
+                           carbon_fluxes_func = MEND2013_fluxes)
+```
+
+
+Plot the results. 
+
+```{r, dpi=150, fig.width=7, fig.height=7, out.width=504, out.height=504, fig.align='center'}
+ggplot(data = MEND2013_example1) + 
+  geom_line(aes(time, value)) + 
+  facet_wrap("variable", scales = "free") + 
+  theme_bw() + 
+  labs(title = 'Default MEND 2013 Run', 
+       y = "mg C/g soil")
+```
+
+
+### Change Parameters
+
+In this example we will change the `V.d` the max doc uptake for microbial biomass growth. When `V.d` increases more DOC can be taken up by the microbial biomass, so we would expect the B (microbial biomass pool) to be larger the `V.d x 2` MEND 2013 simulation. 
+
+```{r}
+# Make a copy of the default MEND 2013 parameters and doubble the V.d value. 
+doubble_Kd <- MENDplus::MEND2013_params
+doubble_Kd[parameter == 'V.d', ]$value <- MENDplus::MEND2013_params[parameter == 'V.d', value] * 2
+
+# Now solve the MEND2013 model with the new  parmeters. The only difference between the set up 
+# for MEND2013_example2 and MEND2013_example1 is the parameter data frame  passed into the solver.
+MEND2013_example2 <- solver(params = doubble_Kd, 
+                            time = seq(0, 1e3, by = 0.1), 
+                           state = state, 
+                           carbon_pools_func = MEND2013_pools, 
+                           carbon_fluxes_func = MEND2013_fluxes)
+
+```
+
+Compare the two simulations! 
+
+```{r, dpi=150, fig.width=7, fig.height=7, out.width=504, out.height=504, fig.align='center'}
+# Add the smilulation names as columns and  combine into a single  data frame for visualization. 
+MEND2013_example1$scn <- 'default'
+MEND2013_example2$scn <- 'V.d X 2'
+rslt <- rbind(MEND2013_example1, MEND2013_example2)
+
+ggplot(data = rslt) + 
+  geom_line(aes(time, value, color = scn)) + 
+  facet_wrap("variable", scales = "free") + 
+  theme_bw() + 
+  labs(title = 'Default MEND 2013 Run', 
+       y = "mg C/g soil")
+```
+
+As we were expecting the biomass pool is larger in the `V.d X 2` simulation!
+
+\
+\
+\
+
+****
+```{r}
+sessionInfo()
+```
+

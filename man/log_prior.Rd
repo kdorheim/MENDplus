@@ -4,16 +4,16 @@
 \alias{log_prior}
 \title{Calculate the log prior}
 \usage{
-log_prior(params, ptable = default_parameters)
+log_prior(params, ptable = MENDplus::MEND2013_params)
 }
 \arguments{
 \item{params}{a vector of parameters, the vector must include parameter names.}
 
-\item{ptable}{a MEND parameter table that will be updated with the values from params. \link{default_parameters}
+\item{ptable}{a MEND parameter table that will be updated with the values from params. \link{MEND2013_params}
 is used as the default paraemter table. However ptable may be set to any data frame that contains the
 following columns.
 \describe{
-\item{parameter}{String character of the default MEND parameters.}
+\item{parameter}{String character of the default \code{MEND2013_params}}
 \item{description}{String character describing the parameter.}
 \item{units}{String character of the parameter units.}
 \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}}}

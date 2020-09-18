@@ -15,10 +15,10 @@ test_that('replace_params', {
   # Make sure it works with the default parameter table.
   params <- c('Q.max' = 40, 'E.c' = 100)
   out <- replace_params(params)
-  expect_equal(sum(out != default_parameters, na.rm = TRUE), 2)
+  expect_equal(sum(out != MEND2013_params, na.rm = TRUE), 2)
 
   # Make sure it can work with a custom parameter table.
-  sub <- default_parameters[1:5, ]
+  sub <- MEND2013_params[1:5, ]
   params <- c('K.p' = 100,  'K.m' = 100)
   out <- replace_params(params, sub)
   expect_equal(dim(out), dim(sub))

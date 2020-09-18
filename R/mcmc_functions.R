@@ -2,12 +2,12 @@
 
 #' Change parameter values in a parameter table.
 #'
-#' \code{replace_params} Update a table of MEND parameter values such as \link{default_parameters},
+#' \code{replace_params} Update a table of MEND parameter values such as \link{MEND2013_params},
 #' with new parameter values. This a helper function to run the mcmc and can also be helpful in
 #' a sensitivity analysis
 #'
 #' @param params a vector of parameters, the vector must include parameter names.
-#' @param ptable  a MEND parameter table that will be updated with the values from params. \link{default_parameters}
+#' @param ptable  a MEND parameter table that will be updated with the values from params. \link{MEND2013_params}
 #' is used as the default paraemter table. However ptable may be set to any data frame that contains the
 #' following columns.
 #'\describe{
@@ -18,7 +18,7 @@
 #' @return A MEND parameter table with updated params values.
 #' @importFrom assertthat assert_that
 #' @export
-replace_params <- function(params, ptable = default_parameters){
+replace_params <- function(params, ptable = MENDplus::MEND2013_params){
 
   assert_that(!is.null(names(params)), msg = 'params vector must  be  named.')
   assert_that(all(names(params) %in% ptable$parameter),  msg = 'params names not identified as ptable parameter entries.')
@@ -43,22 +43,22 @@ replace_params <- function(params, ptable = default_parameters){
 #' TODO there should probably be some better way to set up and define the hyperparameters.
 #'
 #' @param params a vector of parameters, the vector must include parameter names.
-#' @param ptable  a MEND parameter table that will be updated with the values from params. \link{default_parameters}
+#' @param ptable  a MEND parameter table that will be updated with the values from params. \link{MEND2013_params}
 #' is used as the default paraemter table. However ptable may be set to any data frame that contains the
 #' following columns.
 #'\describe{
-#' \item{parameter}{String character of the default MEND parameters.}
+#' \item{parameter}{String character of the default \code{MEND2013_params}}
 #' \item{description}{String character describing the parameter.}
 #' \item{units}{String character of the parameter units.}
 #' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}}
 #' @return the log prior for the sampled parameters.
 #' @export
-log_prior <- function(params, ptable = default_parameters){
+log_prior <- function(params, ptable = MENDplus::MEND2013_params){
 
   lpriors <- mapply(FUN = function(p, pname){
 
     mean_p <- ptable$value[ptable$parameter == pname]
-    dnorm(x = p, mean = mean_p, sd = mean_p * 10, log = T)
+    stats::dnorm(x = p, mean = mean_p, sd = mean_p * 10, log = T)
 
   }, p = params, pname = names(params), SIMPLIFY = TRUE)
 
@@ -81,10 +81,10 @@ log_prior <- function(params, ptable = default_parameters){
 #' @param t time vector that will be used to run the model.
 #' @param state the inital state variables
 #' @param carbon_pools_func the function that governs the relationship between the different carbon
-#' pools, by default it is set to \code{MEND_carbon_pools}.
-#' @param  flux_func the function that governs fluxes, by default is it set to \code{MEND_fluxes}.
+#' pools, by default it is set to \code{MEND2013_pools}.
+#' @param  flux_func the function that governs fluxes, by default is it set to \code{MEND2013_fluxes}.
 #' @param ptable
-#'\describe{ A table of MEND parameter calues, by default is it set to \code{default_parameters}. While
+#'\describe{ A table of MEND parameter calues, by default is it set to \code{MEND2013_params}. While
 #' a different table may be used it must contain the following columns.
 #' \item{parameter}{String character of the default MEND parameters.}
 #' \item{description}{String character describing the parameter.}
@@ -100,9 +100,9 @@ make_logpost <- function(comp,
                          t = seq(0, 1000, 1),
                          state = c(P = 10,  M = 5,  Q = 0.1,  B = 2,  D = 1,
                                    EP = 0.00001,  EM = 0.00001,  IC = 0,  Tot = 18.10002),
-                         carbon_pools_func = MEND_carbon_pools,
-                         flux_func = MEND_fluxes,
-                         ptable = default_parameters,
+                         carbon_pools_func = MENDplus::MEND2013_pools,
+                         flux_func = MENDplus::MEND2013_fluxes,
+                         ptable = MENDplus::MEND2013_params,
                          verbose = FALSE){
 
 
