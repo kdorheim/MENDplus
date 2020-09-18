@@ -1,9 +1,7 @@
 
-#' 2015 MEND plus parameters
+#' The default MEND 2013 parameters.
 #'
-#' The default parameters for MEND 2015.
-#'
-#' @format A data table consisting of 4 columns with inputs from Wang et al. 2013, doi:10.1890/12-0681.1.
+#' @format A data table consisting of 4 columns with inputs from \href{https://doi.org/10.1890/12-0681.1}{Wang et al. 2013}.
 #' \describe{
 #' \item{parameter}{String character of the default MEND parameters.}
 #' \item{description}{String character describing the parameter.}
@@ -11,4 +9,4 @@
 #' \item{value}{Numeric values taken from the table 2 of the Wang et al. 2013}
 #' }
 #' @family parameters
-"default_parameters"
+"MEND2013_params"

@@ -2,8 +2,6 @@
 # model parameters through steady‐state and dynamic analyses. Ecological Applications,
 # 23: 255-272. doi:10.1890/12-0681.1
 
-# TODO there might be some issues how the inputs have been defined. Need to revist.
-
 # Model parameter/inputs names from table 2.
 params <- c('V.p',
            'K.p',
@@ -70,37 +68,35 @@ units <- c('mgC mgC^-1 h^-1',
            NA)
 
 # Create the data table of the parameters.
-default_parameters <- data.table::data.table(parameter = params,
+MEND2013_params <- data.table::data.table(parameter = params,
                                                   description = description,
                                                   units = units, value = NA_real_)
 
 # Model parameter/inputs values from table 2.
-default_parameters[parameter == 'V.p', ]$value <- 2.5
-default_parameters[parameter == 'm.r', ]$value <- 2.8e-4
-default_parameters[parameter == 'E.c', ]$value <- 0.47
-default_parameters[parameter == 'f.d', ]$value <- 0.5
-default_parameters[parameter == 'g.d', ]$value <- 0.5
-default_parameters[parameter == 'r.ep', ]$value <- 1e-3
-default_parameters[parameter == 'r.em', ]$value <- 1e-3
-default_parameters[parameter == 'p.ep', ]$value <- 1e-2
-default_parameters[parameter == 'p.em', ]$value <- 1e-2
-default_parameters[parameter == 'Q.max', ]$value <- 1.7
-default_parameters[parameter == 'K.ba', ]$value <- 6
-default_parameters[parameter == 'K.des', ]$value <- 1e-3
-default_parameters[parameter == 'K.ads', ]$value <- default_parameters[parameter == 'K.ba', ]$value * default_parameters[parameter == 'K.des', ]$value
-default_parameters[parameter == 'K.d', ]$value <- 0.26
-default_parameters[parameter == 'V.d', ]$value <- 5e-4
-default_parameters[parameter == 'K.p', ]$value <- 50
-default_parameters[parameter == 'V.m', ]$value <- 1
-default_parameters[parameter == 'K.m', ]$value <- 250
-default_parameters[parameter == 'K.m', ]$value <- 250
-default_parameters[parameter == 'I.p', ]$value <- 8e-05
-default_parameters[parameter == 'I.d', ]$value <- 8e-05
-default_parameters[parameter == 'fI.d', ]$value <- default_parameters[parameter == 'I.d', ]$value /  default_parameters[parameter == 'I.p', ]$value
+MEND2013_params[parameter == 'V.p', ]$value <- 2.5
+MEND2013_params[parameter == 'm.r', ]$value <- 2.8e-4
+MEND2013_params[parameter == 'E.c', ]$value <- 0.47
+MEND2013_params[parameter == 'f.d', ]$value <- 0.5
+MEND2013_params[parameter == 'g.d', ]$value <- 0.5
+MEND2013_params[parameter == 'r.ep', ]$value <- 1e-3
+MEND2013_params[parameter == 'r.em', ]$value <- 1e-3
+MEND2013_params[parameter == 'p.ep', ]$value <- 1e-2
+MEND2013_params[parameter == 'p.em', ]$value <- 1e-2
+MEND2013_params[parameter == 'Q.max', ]$value <- 1.7
+MEND2013_params[parameter == 'K.ba', ]$value <- 6
+MEND2013_params[parameter == 'K.des', ]$value <- 1e-3
+MEND2013_params[parameter == 'K.ads', ]$value <- MEND2013_params[parameter == 'K.ba', ]$value * MEND2013_params[parameter == 'K.des', ]$value
+MEND2013_params[parameter == 'K.d', ]$value <- 0.26
+MEND2013_params[parameter == 'V.d', ]$value <- 5e-4
+MEND2013_params[parameter == 'K.p', ]$value <- 50
+MEND2013_params[parameter == 'V.m', ]$value <- 1
+MEND2013_params[parameter == 'K.m', ]$value <- 250
+MEND2013_params[parameter == 'K.m', ]$value <- 250
+MEND2013_params[parameter == 'I.p', ]$value <- 8e-05
+MEND2013_params[parameter == 'I.d', ]$value <- 8e-05
+MEND2013_params[parameter == 'fI.d', ]$value <- MEND2013_params[parameter == 'I.d', ]$value /  MEND2013_params[parameter == 'I.p', ]$value
 
-assertthat::assert_that(sum(is.na(default_parameters$value)) == 0, msg = 'Not all default parameter values have been defined.')
+assertthat::assert_that(sum(is.na(MEND2013_params$value)) == 0, msg = 'Not all default parameter values have been defined.')
 
-usethis::use_data(default_parameters, overwrite = TRUE)
-
-
+usethis::use_data(x = MEND2013_params, overwrite = TRUE)
 
