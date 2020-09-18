@@ -4,12 +4,12 @@
 \alias{replace_params}
 \title{Change parameter values in a parameter table.}
 \usage{
-replace_params(params, ptable = MENDplus::default_parameters)
+replace_params(params, ptable = MENDplus::MEND2013_params)
 }
 \arguments{
 \item{params}{a vector of parameters, the vector must include parameter names.}
 
-\item{ptable}{a MEND parameter table that will be updated with the values from params. \link{default_parameters}
+\item{ptable}{a MEND parameter table that will be updated with the values from params. \link{MEND2013_params}
 is used as the default paraemter table. However ptable may be set to any data frame that contains the
 following columns.
 \describe{
@@ -22,7 +22,7 @@ following columns.
 A MEND parameter table with updated params values.
 }
 \description{
-\code{replace_params} Update a table of MEND parameter values such as \link{default_parameters},
+\code{replace_params} Update a table of MEND parameter values such as \link{MEND2013_params},
 with new parameter values. This a helper function to run the mcmc and can also be helpful in
 a sensitivity analysis
 }
