@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • MENDplus</title>
+<title>Set up the function that will calculate the log posterior. — make_logpost • MENDplus</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,11 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Set up the function that will calculate the log posterior. — make_logpost" />
+<meta property="og:description" content="make_logpost Define the function that will calculate the log
+posterior. The function returned by make_logpost will be used in
+the metrop to conduct the mcmc.
+TODO figure out  a better way to document the inputs/" />
 
 
 
@@ -58,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,84 +119,86 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Set up the function that will calculate the log posterior.</h1>
+    
+    <div class="hidden name"><code>make_logpost.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p><code>make_logpost</code> Define the function that will calculate the log
+posterior. The function returned by <code>make_logpost</code> will be used in
+the <code>metrop</code> to conduct the mcmc.
+TODO figure out  a better way to document the inputs/</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>make_logpost</span>(
+  <span class='kw'>comp</span>,
+  <span class='kw'>params</span>,
+  t = <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>1000</span>, <span class='fl'>1</span>),
+  state = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(P = <span class='fl'>10</span>, M = <span class='fl'>5</span>, Q = <span class='fl'>0.1</span>, B = <span class='fl'>2</span>, D = <span class='fl'>1</span>, EP = <span class='fl'>1e-05</span>, EM = <span class='fl'>1e-05</span>, IC = <span class='fl'>0</span>, Tot =
+    <span class='fl'>18.10002</span>),
+  carbon_pools_func = <span class='kw'>MENDplus</span>::<span class='kw'><a href='MEND2013_pools.html'>MEND2013_pools</a></span>,
+  flux_func = <span class='kw'>MENDplus</span>::<span class='kw'><a href='MEND2013_fluxes.html'>MEND2013_fluxes</a></span>,
+  ptable = <span class='kw'>MENDplus</span>::<span class='kw'><a href='MEND2013_params.html'>MEND2013_params</a></span>,
+  verbose = <span class='fl'>FALSE</span>
+)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="MEND2013_fluxes.html">MEND2013_fluxes()</a></code> </p>
-        </td>
-        <td><p>Define the 2013 MEND fluxes.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="MEND2013_params.html">MEND2013_params</a></code> </p>
-        </td>
-        <td><p>The default MEND 2013 parameters.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="MEND2013_pools.html">MEND2013_pools()</a></code> </p>
-        </td>
-        <td><p>Define 2013 MEND carbon pools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="log_prior.html">log_prior()</a></code> </p>
-        </td>
-        <td><p>Calculate the log prior</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="make_logpost.html">make_logpost()</a></code> </p>
-        </td>
-        <td><p>Set up the function that will calculate the log posterior.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_fluxes_func.html">modify_fluxes_func()</a></code> </p>
-        </td>
-        <td><p>Alter a MEND function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="replace_params.html">replace_params()</a></code> </p>
-        </td>
-        <td><p>Change parameter values in a parameter table.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="solver.html">solver()</a></code> </p>
-        </td>
-        <td><p>Sovle for a MENDplus model set up.</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>comp</th>
+      <td><dl>
+<dt>time</dt><dd><p>model time</p></dd>
+<dt>IC</dt><dd><p>inorganic carbon, is the the co2 flux from  microbial respiration.</p></dd>
+</dl></td>
+    </tr>
+    <tr>
+      <th>params</th>
+      <td><p>a named vector of the inital guess of the parameters that will be calibrated in the mcmc.</p></td>
+    </tr>
+    <tr>
+      <th>t</th>
+      <td><p>time vector that will be used to run the model.</p></td>
+    </tr>
+    <tr>
+      <th>state</th>
+      <td><p>the inital state variables</p></td>
+    </tr>
+    <tr>
+      <th>carbon_pools_func</th>
+      <td><p>the function that governs the relationship between the different carbon
+pools, by default it is set to <code>MEND2013_pools</code>.</p></td>
+    </tr>
+    <tr>
+      <th>flux_func</th>
+      <td><p>the function that governs fluxes, by default is it set to <code>MEND2013_fluxes</code>.</p></td>
+    </tr>
+    <tr>
+      <th>ptable</th>
+      <td><dl>
+MEND2013_params. While
+a different table may be used it must contain the following columns.
+<dt>parameter</dt><dd><p>String character of the default MEND parameters.</p></dd>
+<dt>description</dt><dd><p>String character describing the parameter.</p></dd>
+<dt>units</dt><dd><p>String character of the parameter units.</p></dd>
+<dt>value</dt><dd><p>Numeric values taken from the table 2 of the Wang et al. 2013</p></dd>
+</dl></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>a TRUE/FALSE indicator to run the function in verbose mode where messages are printed out,
+by default set to FALSE.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a function that will return the log posterior.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
