@@ -2,6 +2,8 @@
 
 export(MEND2013_fluxes)
 export(MEND2013_pools)
+export(MEND2pool_fluxes)
+export(MEND2pool_pools)
 export(log_prior)
 export(make_logpost)
 export(modify_fluxes_func)

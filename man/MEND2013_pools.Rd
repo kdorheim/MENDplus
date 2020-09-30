@@ -30,6 +30,9 @@ describe the state of the carbon pools from \href{https://doi.org/10.1890/12-068
 \seealso{
 Other 2013 MEND model functions: 
 \code{\link{MEND2013_fluxes}()}
+
+Other carbon pool functions: 
+\code{\link{MEND2pool_pools}()}
 }
 \concept{2013 MEND model functions}
 \concept{carbon pool functions}
