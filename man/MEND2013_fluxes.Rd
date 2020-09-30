@@ -22,6 +22,9 @@ By retruning a list of named functions.
 \seealso{
 Other 2013 MEND model functions: 
 \code{\link{MEND2013_pools}()}
+
+Other carbon flux functions: 
+\code{\link{MEND2pool_fluxes}()}
 }
 \concept{2013 MEND model functions}
 \concept{carbon flux functions}
